@@ -1,57 +1,42 @@
 
 import React from 'react';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { ResponsiveContainer, AreaChart, Area, YAxis } from 'recharts';
 import { GMPDataPoint } from '../types';
 
 interface GMPTrendChartProps {
   data: GMPDataPoint[];
-  symbol: string;
+  color?: string;
 }
 
-export const GMPTrendChart: React.FC<GMPTrendChartProps> = ({ data, symbol }) => {
-  if (!data || data.length === 0) return (
-    <div className="h-24 flex items-center justify-center text-xs text-gray-400 border border-dashed border-gray-200 rounded-lg">
-      No Data
-    </div>
-  );
+export const GMPTrendChart: React.FC<GMPTrendChartProps> = ({ data, color }) => {
+  if (!data || data.length === 0) return null;
 
-  const isPositive = data[data.length - 1].price >= 0;
-  const strokeColor = isPositive ? '#16a34a' : '#dc2626'; // Green or Red
+  // Determine color if not provided based on trend
+  const lastPoint = data[data.length - 1];
+  const firstPoint = data[0];
+  const isPositive = lastPoint.price >= firstPoint.price;
+  const chartColor = color || (isPositive ? '#16a34a' : '#dc2626');
 
   return (
-    <div className="w-full h-24">
-      <div className="flex justify-between items-center mb-1 px-1">
-        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Trend (10D)</span>
-        <span className={`text-[10px] font-bold ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
-          {data[data.length - 1].percentage}%
-        </span>
-      </div>
+    <div className="h-16 w-full">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-          <XAxis 
-            dataKey="date" 
-            hide 
-          />
-          <YAxis 
-            hide 
-            domain={['auto', 'auto']} 
-          />
-          <Tooltip 
-            contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', fontSize: '12px', padding: '4px 8px' }}
-            itemStyle={{ color: '#333' }}
-            formatter={(value: number) => [`₹${value}`, 'GMP']}
-            labelStyle={{ display: 'none' }}
-          />
-          <Line 
+        <AreaChart data={data} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
+          <defs>
+            <linearGradient id={`gradient-${chartColor}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={chartColor} stopOpacity={0.3}/>
+              <stop offset="95%" stopColor={chartColor} stopOpacity={0}/>
+            </linearGradient>
+          </defs>
+          <YAxis hide domain={['dataMin', 'dataMax']} />
+          <Area 
             type="monotone" 
             dataKey="price" 
-            stroke={strokeColor} 
-            strokeWidth={2} 
-            dot={false}
-            activeDot={{ r: 4 }} 
+            stroke={chartColor} 
+            fillOpacity={1} 
+            fill={`url(#gradient-${chartColor})`} 
+            strokeWidth={2}
           />
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );

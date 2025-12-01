@@ -79,45 +79,53 @@ export const PeerComparisonWidget = ({ data }: { data: PeerComparisonMetric[] })
 
 export const AnchorInvestorWidget = ({ data }: { data: AnchorInvestor[] }) => {
   return (
-    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm h-full overflow-hidden w-full">
-      <h3 className="font-bold text-gray-900 mb-5 flex items-center gap-2 border-l-4 border-emerald-600 pl-3">
-        <Briefcase size={18} className="text-emerald-600" />
-        Anchor Investor Intelligence
-      </h3>
+    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm w-full flex flex-col">
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="font-bold text-gray-900 flex items-center gap-2 border-l-4 border-emerald-600 pl-3">
+            <Briefcase size={18} className="text-emerald-600" />
+            Anchor Investor Intelligence
+        </h3>
+        <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-md">{data.length} Funds</span>
+      </div>
       
-      <div className="overflow-x-auto w-full">
-        <table className="w-full text-sm text-left min-w-[600px]">
-          <thead className="bg-gray-50 text-gray-500 font-medium border-b border-gray-200">
-            <tr>
-              <th className="py-3 px-4 pl-4 rounded-tl-lg">Fund Name</th>
-              <th className="py-3 px-4">Category</th>
-              <th className="py-3 px-4">Amount</th>
-              <th className="py-3 px-4 rounded-tr-lg">Lock-in End</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {data.map((row, idx) => (
-              <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                <td className="py-3 px-4 pl-4">
-                  <div className="font-bold text-gray-900">{row.name}</div>
-                  <div className="flex gap-2 mt-1">
-                    {row.tier === 1 && <span className="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Tier 1</span>}
-                    {row.tier === 2 && <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Tier 2</span>}
-                    {row.tier === 3 && <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded uppercase tracking-wider">Tier 3</span>}
-                  </div>
-                </td>
-                <td className="py-3 px-4 text-gray-600">{row.category}</td>
-                <td className="py-3 px-4 font-mono font-medium">{row.amount}</td>
-                <td className="py-3 px-4 text-gray-500">
-                   <div className="flex items-center gap-1.5">
-                     <Lock size={12} className="text-gray-400" />
-                     {row.lockInEnd}
-                   </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Container for responsive table with fixed height */}
+      <div className="border border-gray-200 rounded-lg overflow-hidden flex flex-col">
+        <div className="overflow-x-auto">
+            <div className="max-h-[300px] overflow-y-auto">
+                <table className="w-full text-sm text-left min-w-[600px]">
+                <thead className="bg-gray-50 text-gray-500 font-medium border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+                    <tr>
+                    <th className="py-3 px-4 pl-4 whitespace-nowrap bg-gray-50">Fund Name</th>
+                    <th className="py-3 px-4 whitespace-nowrap bg-gray-50">Category</th>
+                    <th className="py-3 px-4 whitespace-nowrap bg-gray-50">Amount</th>
+                    <th className="py-3 px-4 whitespace-nowrap bg-gray-50">Lock-in End</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 bg-white">
+                    {data.map((row, idx) => (
+                    <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                        <td className="py-3 px-4 pl-4">
+                        <div className="font-bold text-gray-900 truncate max-w-[200px]" title={row.name}>{row.name}</div>
+                        <div className="flex gap-2 mt-1">
+                            {row.tier === 1 && <span className="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Tier 1</span>}
+                            {row.tier === 2 && <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Tier 2</span>}
+                            {row.tier === 3 && <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded uppercase tracking-wider">Tier 3</span>}
+                        </div>
+                        </td>
+                        <td className="py-3 px-4 text-gray-600 whitespace-nowrap">{row.category}</td>
+                        <td className="py-3 px-4 font-mono font-medium whitespace-nowrap">{row.amount}</td>
+                        <td className="py-3 px-4 text-gray-500 whitespace-nowrap">
+                        <div className="flex items-center gap-1.5">
+                            <Lock size={12} className="text-gray-400" />
+                            {row.lockInEnd}
+                        </div>
+                        </td>
+                    </tr>
+                    ))}
+                </tbody>
+                </table>
+            </div>
+        </div>
       </div>
     </div>
   );

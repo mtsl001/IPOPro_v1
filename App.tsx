@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -10,6 +11,7 @@ import { PerformancePage } from './pages/Performance';
 import { PremiumTools } from './pages/PremiumTools';
 import { LandingPage } from './pages/LandingPage';
 import { AuthPage } from './pages/Auth';
+import { AdminDashboard } from './pages/AdminDashboard';
 
 // Wrapper for Protected Routes
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -50,6 +52,9 @@ const App: React.FC = () => {
           
           {/* Premium Tools */}
           <Route path="/app/premium" element={<ProtectedRoute><PremiumTools /></ProtectedRoute>} />
+
+          {/* Admin Route (Ideally should have role check, but using Protected for now) */}
+          <Route path="/app/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
           
           {/* Fallback for legacy routes or 404s */}
           <Route path="*" element={<Navigate to="/" replace />} />

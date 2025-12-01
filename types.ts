@@ -163,3 +163,9 @@ export interface ValuationPoint {
   name: string;
   type: 'IPO' | 'Peer';
 }
+
+// ADMIN TYPES
+export interface ExtractionPrompt {
+  sourceText: string;
+  type: 'BASIC_INFO' | 'FINANCIAL_SCORE' | 'RED_FLAGS' | 'FULL_REPORT';
+}

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { IPOCard } from '../components/IPOCard';
 import { GMPTrendChart } from '../components/GMPTrendChart';
@@ -166,7 +167,7 @@ export const Dashboard = () => {
         {/* Widget 1: Allotment Calculator */}
         <AllotmentCalculator />
 
-        {/* Widget 2: GMP Movers */}
+        {/* Widget 2: GMP Movers (UPDATED LAYOUT) */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
            <div className="flex items-center justify-between mb-6">
              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide flex items-center gap-2">
@@ -176,21 +177,40 @@ export const Dashboard = () => {
              <span className="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded font-bold">24H</span>
            </div>
            
-           <div className="space-y-6">
-              {MOCK_IPOS.filter(i => i.gmpHistory.length > 0).slice(0, 3).map((ipo, idx) => (
-                <div key={ipo.id} className="group cursor-pointer">
-                  <div className="flex justify-between items-center mb-1.5">
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-gray-400 w-4">{idx + 1}</span>
-                        <span className="font-bold text-gray-700 text-sm group-hover:text-blue-600 transition-colors">{ipo.symbol}</span>
+           <div className="space-y-4">
+              {MOCK_IPOS.filter(i => i.gmpHistory.length > 0).slice(0, 3).map((ipo, idx) => {
+                const isPositive = ipo.gmp > 0;
+                const color = isPositive ? '#16a34a' : '#dc2626';
+                
+                return (
+                  <div key={ipo.id} className="group cursor-pointer border border-gray-100 rounded-xl p-3 hover:shadow-md transition-all hover:border-blue-100 bg-gray-50/30 hover:bg-white">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded bg-white border border-gray-200 flex items-center justify-center text-xs font-bold text-gray-400">
+                            {idx + 1}
+                          </div>
+                          <div>
+                             <div className="font-bold text-gray-900 text-sm group-hover:text-blue-600 transition-colors">{ipo.symbol}</div>
+                             <div className="text-[10px] text-gray-500">{ipo.sector}</div>
+                          </div>
+                      </div>
+                      <div className="text-right">
+                         <div className={`text-sm font-black ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                           {isPositive ? '+' : ''}₹{ipo.gmp}
+                         </div>
+                         <div className={`text-[10px] font-bold ${isPositive ? 'text-green-500' : 'text-red-500'}`}>
+                           {ipo.gmpPercentage}%
+                         </div>
+                      </div>
                     </div>
-                    <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${ipo.gmp > 0 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                      {ipo.gmp > 0 ? '+' : ''}₹{ipo.gmp}
-                    </span>
+                    
+                    {/* Sparkline */}
+                    <div className="mt-2 opacity-70 group-hover:opacity-100 transition-opacity">
+                       <GMPTrendChart data={ipo.gmpHistory} color={color} />
+                    </div>
                   </div>
-                  <GMPTrendChart data={ipo.gmpHistory} symbol={ipo.symbol} />
-                </div>
-              ))}
+                );
+              })}
            </div>
         </div>
 

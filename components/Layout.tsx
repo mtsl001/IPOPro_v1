@@ -1,6 +1,8 @@
+
+
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Calendar, BarChart2, FileSearch, PieChart, Menu, Bell, LogOut, ChevronRight, Search } from 'lucide-react';
+import { LayoutDashboard, Calendar, BarChart2, FileSearch, PieChart, Menu, Bell, LogOut, ChevronRight, Search, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 interface LayoutProps {
@@ -24,6 +26,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     { icon: <BarChart2 size={18} />, label: 'Performance', path: '/app/performance' },
     { icon: <PieChart size={18} />, label: 'Premium Tools', path: '/app/premium' },
   ];
+
+  // In a real app, check user.role === 'admin'
+  const isAdmin = true; 
 
   return (
     <div className="min-h-screen bg-gray-50 flex font-sans">
@@ -65,6 +70,26 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               </Link>
             );
           })}
+
+          {isAdmin && (
+            <>
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 px-3 mt-6">Admin</div>
+              <Link
+                to="/app/admin"
+                className={`group flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                  location.pathname === '/app/admin'
+                    ? 'bg-emerald-600 text-white shadow-lg' 
+                    : 'text-slate-400 hover:bg-slate-800 hover:text-emerald-400'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <ShieldCheck size={18} />
+                  Admin Control
+                </div>
+              </Link>
+            </>
+          )}
+
         </nav>
 
         {/* User Plan Status */}
